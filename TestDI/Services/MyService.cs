@@ -6,38 +6,46 @@ using Microsoft.Extensions.Options;
 using TestDI.Options;
 using TestDI.Services.Interfaces;
 
-namespace TestDI.Services
+namespace TestDI.Services;
+
+public class MyService : IMyService
 {
-    public class MyService : IMyService
+    private readonly IOptions<CommonWebOptions> _commonWebOptions;
+    private readonly ILogger<MyService> _logger;
+    private readonly ITestCSharp10Service _testCSharp10Service;
+
+    private readonly string _baseUrl;
+    private readonly string _token;
+
+    public MyService(ILoggerFactory loggerFactory,
+        IConfigurationRoot config,
+        IOptions<CommonWebOptions> commonWebOptions,
+        ILogger<MyService> logger,
+        ITestCSharp10Service testCSharp10Service)
     {
-        private readonly IOptions<CommonWebOptions> _commonWebOptions;
-        private readonly string _baseUrl;
-        private readonly string _token;
-        private readonly ILogger<MyService> _logger;
+        _commonWebOptions = commonWebOptions;
+        _logger = logger;
+        _testCSharp10Service = testCSharp10Service;
+        var baseUrl = _commonWebOptions.Value.BaseUrl;
+        var token = _commonWebOptions.Value.Token;
+        //var baseUrl = config["CommonWeb:BaseUrl"];
+        //var token = config["CommonWeb:Token"];
 
-        public MyService(ILoggerFactory loggerFactory, IConfigurationRoot config, IOptions<CommonWebOptions> commonWebOptions, ILogger<MyService> logger)
-        {
-            _commonWebOptions = commonWebOptions;
-            _logger = logger;
-            var baseUrl = _commonWebOptions.Value.BaseUrl;
-            var token = _commonWebOptions.Value.Token;
-            //var baseUrl = config["CommonWeb:BaseUrl"];
-            //var token = config["CommonWeb:Token"];
+        _baseUrl = baseUrl;
+        _token = token;
+    }
 
-            _baseUrl = baseUrl;
-            _token = token;
-        }
+    public Task MyServiceMethod()
+    {
+        // _logger.LogDebug(_baseUrl);
+        // _logger.LogInformation(_token);
+        // _logger.LogWarning(_token);
+        // _logger.LogError(_token);
+        // _logger.LogCritical(_token);
+        // throw new InvalidOperationException("test throw");
 
-        public Task MyServiceMethod()
-        {
-            _logger.LogDebug(_baseUrl);
-            _logger.LogInformation(_token);
-            _logger.LogWarning(_token);
-            _logger.LogError(_token);
-            _logger.LogCritical(_token);
+        _testCSharp10Service.Test();
 
-            throw new InvalidOperationException("test throw");
-            return Task.CompletedTask;
-        }
+        return Task.CompletedTask;
     }
 }

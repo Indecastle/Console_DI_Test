@@ -3,30 +3,29 @@ using Microsoft.Extensions.Logging;
 using System;
 using TestDI.Services.Interfaces;
 
-namespace TestDI
+namespace TestDI;
+
+class Program
 {
-    class Program
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
-        {
-            IServiceCollection services = new ServiceCollection();
+        IServiceCollection services = new ServiceCollection();
 
-            Startup startup = new Startup();
-            startup.ConfigureServices(services);
+        Startup startup = new Startup();
+        startup.ConfigureServices(services);
 
-            IServiceProvider serviceProvider = services.BuildServiceProvider();
+        IServiceProvider serviceProvider = services.BuildServiceProvider();
 
 
-            var logger = serviceProvider.GetService<ILoggerFactory>()!
-                .CreateLogger<Program>();
+        var logger = serviceProvider.GetService<ILoggerFactory>()!
+            .CreateLogger<Program>();
 
-            logger.LogDebug("Logger is working!");
+        logger.LogDebug("Logger is working!");
 
 
-            // Get Service and call method
-            var service = serviceProvider.GetService<IMyService>();
+        // Get Service and call method
+        var service = serviceProvider.GetService<IMyService>();
 
-            service.MyServiceMethod();
-        }
+        service.MyServiceMethod().Wait();
     }
 }

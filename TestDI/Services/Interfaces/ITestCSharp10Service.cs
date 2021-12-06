@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TestDI.Options;
+namespace TestDI.Services.Interfaces;
 
-public interface IBaseOptions
+public interface ITestCSharp10Service
 {
-    public const string Position = null;
+    public void Test();
 }

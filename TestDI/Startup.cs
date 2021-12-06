@@ -10,33 +10,32 @@ using TestDI.Services;
 using TestDI.Services.Interfaces;
 using TestDI.Options;
 
-namespace TestDI
+namespace TestDI;
+
+public class Startup
 {
-    public class Startup
+    IConfigurationRoot Configuration { get; }
+
+    public Startup()
     {
-        IConfigurationRoot Configuration { get; }
+        var builder = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json");
 
-        public Startup()
+        Configuration = builder.Build();
+    }
+
+    public void ConfigureServices(IServiceCollection services)
+    {
+        //configure console logging
+        services.AddLogging(opt =>
         {
-            var builder = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json");
+            opt.SetMinimumLevel(LogLevel.Debug);
+            opt.AddConsole();
+        });
 
-            Configuration = builder.Build();
-        }
+        services.AddSingleton<IConfigurationRoot>(Configuration);
 
-        public void ConfigureServices(IServiceCollection services)
-        {
-            //configure console logging
-            services.AddLogging(opt =>
-            {
-                opt.SetMinimumLevel(LogLevel.Debug);
-                opt.AddConsole();
-            });
-
-            services.AddSingleton<IConfigurationRoot>(Configuration);
-            services.AddSingleton<IMyService, MyService>();
-
-            StartupExtensions.AddOptions(services, Configuration);
-        }
+        StartupExtensions.AddOptions(services, Configuration);
+        services.AddServices();
     }
 }
