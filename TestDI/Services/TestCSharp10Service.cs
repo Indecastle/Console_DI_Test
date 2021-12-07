@@ -19,6 +19,7 @@ internal class TestCSharp10Service : ITestCSharp10Service
 
     public void Test()
     {
+        _logger.LogInformation("----------- C# 10 -----------");
         _logger.LogInformation("Step01 Ran");
         Step01.Run();
         _logger.LogInformation("Step02 Ran");

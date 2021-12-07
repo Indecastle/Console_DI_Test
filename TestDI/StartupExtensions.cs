@@ -22,6 +22,8 @@ internal static class StartupExtensions
     public static void AddServices(this IServiceCollection services)
     {
         services.AddSingleton<IMyService, MyService>();
+
         services.AddSingleton<ITestCSharp10Service, TestCSharp10Service>();
+        services.AddSingleton<ITestCSharp9Service, TestCSharp9Service>();
     }
 }
