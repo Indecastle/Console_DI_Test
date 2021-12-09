@@ -115,6 +115,13 @@ internal class TestCSharp9Service : ITestCSharp9Service
         public static void Run()
         {
             DateTime date = new(2021, 12, 07);
+            if (date is {
+                    DayOfWeek: DayOfWeek.Friday or DayOfWeek.Sunday,
+                    Day: > 5 and <= 6
+                })
+            {
+            }
+
             Console.WriteLine(PeakTimePremiumFull(date.AddHours(0), true));
             Console.WriteLine(PeakTimePremiumFull(date.AddHours(15), true));
             Console.WriteLine(PeakTimePremiumFull(date.AddHours(8), true));

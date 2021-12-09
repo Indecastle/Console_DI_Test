@@ -25,5 +25,6 @@ internal static class StartupExtensions
 
         services.AddSingleton<ITestCSharp10Service, TestCSharp10Service>();
         services.AddSingleton<ITestCSharp9Service, TestCSharp9Service>();
+        services.AddSingleton<IPollyService, PollyService>();
     }
 }
