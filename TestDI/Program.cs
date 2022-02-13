@@ -25,7 +25,6 @@ class Program
         // Get Service and call method
         var service = serviceProvider.GetService<IMyService>();
 
-
         service.MyServiceMethod().Wait();
         
     }

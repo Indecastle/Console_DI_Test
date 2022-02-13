@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ public class MyService : IMyService
     private readonly ITestCSharp9Service _testCSharp9Service;
     private readonly ITestCSharp10Service _testCSharp10Service;
     private readonly IPollyService _pollyService;
+    private readonly ITestParallel _testParallel;
 
     private readonly string _baseUrl;
     private readonly string _token;
@@ -25,13 +27,15 @@ public class MyService : IMyService
         ILogger<MyService> logger,
         ITestCSharp9Service testCSharp9Service,
         ITestCSharp10Service testCSharp10Service,
-        IPollyService pollyService)
+        IPollyService pollyService,
+        ITestParallel testParallel)
     {
         _commonWebOptions = commonWebOptions;
         _logger = logger;
         _testCSharp9Service = testCSharp9Service;
         _testCSharp10Service = testCSharp10Service;
         _pollyService = pollyService;
+        _testParallel = testParallel;
         var baseUrl = _commonWebOptions.Value.BaseUrl;
         var token = _commonWebOptions.Value.Token;
         //var baseUrl = config["CommonWeb:BaseUrl"];
@@ -53,7 +57,14 @@ public class MyService : IMyService
         // _testCSharp9Service.Test();
         // _testCSharp10Service.Test();
 
-        await _pollyService.TestPolly();
+        // await _pollyService.TestPolly();
+        // await _testParallel.Test();
+
+        List<object> ar = new();
+        int? x = 3;
+        x = null;
+        ar.Add(x);
+        _logger.LogInformation((ar[0] == null).ToString());
 
         await Task.CompletedTask;
     }
